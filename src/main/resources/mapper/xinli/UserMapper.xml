@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.buaadataplatform.module.mapper.xinli.UserMapper" >
+
+    <select id="queryUserAll" resultType="com.example.buaadataplatform.module.entity.UserEntity">
+          select * from user
+    </select>
+
+    <select id="queryUserById" resultType="com.example.buaadataplatform.module.entity.UserEntity">
+          select * from user
+          where userid=#{userid}
+    </select>
+
+    <update id="updateUser" parameterType="com.example.buaadataplatform.module.entity.UserEntity">
+          update user
+          <set>
+              email=#{email},
+              password=#{password},
+              level=#{level},
+              register_time=#{register_time},
+              testday=#{testday},
+              avatar=#{avatar}
+          </set>
+          where user_id=#{user_id}
+    </update>
+
+    <delete id="delteUser">
+          delete
+          from user
+          where user_id=#{user_id}
+    </delete>
+
+    <select id="selectAgeCnt">
+        select count(*)
+        from user
+        where age
+        between #{age1} and #{age2}
+    </select>
+
+    <select id="userLogin" parameterType="com.example.buaadataplatform.module.entity.UserEntity" resultType="com.example.buaadataplatform.module.entity.UserEntity">
+        select *
+        from user
+        where username=#{username} and password=#{password}
+    </select>
+
+    <insert id="register" parameterType="com.example.buaadataplatform.module.entity.UserEntity">
+        insert into user
+        (username, password, register_time, email, number, authority)
+        values
+        (#{username}, #{password}, NOW(), #{email}, #{number}, #{authority})
+    </insert>
+
+</mapper>

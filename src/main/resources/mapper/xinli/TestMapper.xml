@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.buaadataplatform.module.mapper.xinli.TestMapper" >
+
+    <resultMap id="AnswerEntity" type="com.example.buaadataplatform.module.entity.AnswerEntity">
+        <result column="table_answer" property="table_answer" typeHandler="com.example.buaadataplatform.common.utils.BlobTypeHandler"/>
+        <result column="experiment_answer" property="experiment_answer" typeHandler="com.example.buaadataplatform.common.utils.BlobTypeHandler"/>
+    </resultMap>
+
+    <resultMap id="TableEntity" type="com.example.buaadataplatform.module.entity.TableEntity">
+        <result column="expressions" property="expressions" typeHandler="com.example.buaadataplatform.common.utils.BlobTypeHandler"/>
+        <result column="res_names" property="res_names" typeHandler="com.example.buaadataplatform.common.utils.BlobTypeHandler"/>
+        <result column="question_id_list" property="question_id_list" typeHandler="com.example.buaadataplatform.common.utils.BlobTypeHandler"/>
+    </resultMap>
+
+    <resultMap id="ExperimentEntity" type="com.example.buaadataplatform.module.entity.ExperimentEntity">
+        <result column="question_id_list" property="question_id_list" typeHandler="com.example.buaadataplatform.common.utils.BlobTypeHandler"/>
+    </resultMap>
+    
+    <resultMap id="TestEntityMap" type="com.example.buaadataplatform.module.entity.TestEntity">
+        <id column="test_id" property="test_id"></id>
+    </resultMap>
+
+    <select id="queryTestList" resultMap="TestEntityMap">
+       select test_id,title from test
+    </select>
+    
+    <delete id="delTestById">
+        delete from test
+        where test_id=#{test_id}
+    </delete>
+
+    <select id="queryTestById" resultType="com.example.buaadataplatform.module.entity.TestEntity">
+         select * from test
+         where test_id=#{test_id}
+    </select>
+
+    <!--<select id="queryTableById" resultMap="TableEntity">-->
+    <select id="queryTableById" resultType="com.example.buaadataplatform.module.entity.TableEntity">
+        select * from tables
+        where table_id=#{table_id}
+    </select>
+
+    <select id="queryExperimentById" resultType="com.example.buaadataplatform.module.entity.ExperimentEntity">
+        select * from experiment
+        where experiment_id=#{experiment_id}
+    </select>
+
+    <select id="queryQuestionByTestId" resultType="com.example.buaadataplatform.module.entity.QuestionEntity">
+          select * from question
+          where test_id=#{test_id}
+    </select>
+
+    <select id="queryQuestionByTableId" resultType="com.example.buaadataplatform.module.entity.QuestionEntity">
+          select * from question
+          where table_id=#{table_id}
+    </select>
+
+    <select id="queryQuestionByExperimentId" resultType="com.example.buaadataplatform.module.entity.QuestionEntity">
+          select * from question
+          where experiment_id=#{experiment_id}
+    </select>
+    
+    <select id="queryOptionByQuestionId" resultType="com.example.buaadataplatform.module.entity.OptionEntity">
+          select * from options
+          where question_id=#{question_id}
+    </select>
+    
+    <insert id="addAnswer" parameterType="com.example.buaadataplatform.module.entity.AnswerEntity" useGeneratedKeys="true"  keyProperty="answer_id">
+        insert into answer
+        (user_id, test_id, state, json_experiment_answer, json_table_answer, json_record_list, comment, video_url)
+        values
+        (#{user_id}, #{test_id}, "正在审阅", #{json_experiment_answer}, #{json_table_answer }, #{json_record_list},  #{comment}, #{video_url})
+    </insert>
+
+    <delete id="delAnswer">
+        delete from answer
+        where test_id=#{test_id}
+    </delete>
+
+    <insert id="addDiary" parameterType="com.example.buaadataplatform.module.entity.DiaryEntity">
+        insert into diary
+        (user_id, title, content)
+        values
+        (#{user_id}, #{title}, #{content})
+    </insert>
+
+    <select id="queryDiaryById" resultType="com.example.buaadataplatform.module.entity.DiaryEntity">
+        select * from diary
+        where diary_id=#{diary_id}
+    </select>
+
+    <insert id="insertTest" parameterType="com.example.buaadataplatform.module.entity.TestEntity">
+        insert into test
+        (title, table_id, experiment_id, start_date, end_date)
+        values
+        (#{title}, #{table_id}, #{experiment_id}, #{start_date}, #{end_date})
+    </insert>
+
+    <insert id="insertTable" parameterType="com.example.buaadataplatform.module.entity.TableEntity" useGeneratedKeys="true"  keyProperty="table_id">
+        insert into tables
+        (title, expressions, res_names, question_id_list)
+        values
+        (#{title}, #{expressions}, #{res_names}, #{question_id_list})
+    </insert>
+
+    <insert id="insertExperiment" parameterType="com.example.buaadataplatform.module.entity.ExperimentEntity" useGeneratedKeys="true"  keyProperty="experiment_id">
+        insert into experiment
+        (title,question_id_list)
+        values
+        (#{title}, #{question_id_list})
+    </insert>
+
+    <insert id="addQuestion" parameterType="com.example.buaadataplatform.module.entity.QuestionEntity">
+        insert into question
+        (question_id, question, type, pic_url, time_limit, right_answer, option_data, must)
+        values
+        ( #{question_id}, #{question}, #{type}, #{pic_url}, #{time_limit}, #{right_answer}, #{json_options}, #{must})
+    </insert>
+
+    <update id="updateQuestion" parameterType="com.example.buaadataplatform.module.entity.QuestionEntity">
+        update question
+        <set>
+            question=#{question},type=#{type},pic_url=#{pic_url},time_limt=#{time_limit},right_answer=#{right_answer},json_options=#{json_options},must=#{must}
+        </set>
+        where question_id=#{question_id}
+    </update>
+
+    <insert id="insertOption" parameterType="com.example.buaadataplatform.module.entity.OptionEntity" useGeneratedKeys="true"  keyProperty="option_id">
+        insert into
+        options
+        (allowAddReasonStatus, content, picList, score, question_id)
+        values
+        (#{allowAddReasonStatus}, #{content}, #{picList}, #{score}, #{question_id})
+    </insert>
+
+    <select id="queryTestByTitle" resultType="com.example.buaadataplatform.module.entity.TestEntity">
+        select * from test
+        where title like concat('%', #{title}, '%')
+    </select>
+
+    <select id="queryTableByTitle" resultMap="TableEntity">
+        select * from tables
+        where title like concat('%', #{title}, '%')
+    </select>
+
+    <select id="queryExperimentByTitle" resultMap="ExperimentEntity">
+        select * from experiment
+        where title like concat('%', #{title}, '%')
+    </select>
+
+    <select id="queryAnswerList" resultMap="AnswerEntity">
+        select * from answer limit #{index}, #{size}
+    </select>
+
+    <select id="queryQuestionList" resultType="com.example.buaadataplatform.module.entity.QuestionEntity">
+        select * from question limit #{index}, #{size}
+    </select>
+    
+    <select id="mohuQueryQuestion" resultType="com.example.buaadataplatform.module.entity.QuestionEntity">
+        select * from question where question_id like concat('%', #{title}, '%')
+    </select>
+
+    <delete id="deleteQuestion">
+        delete from question
+        where question_id=#{question_id}
+    </delete>
+
+    <update id="updateAnswer" parameterType="com.example.buaadataplatform.module.entity.AnswerEntity">
+        update answer
+        <set>
+            comment=#{comment}, state=#{state}
+        </set>
+        where answer_id=#{answer_id}
+    </update>
+
+    <update id="updateExperiment" parameterType="com.example.buaadataplatform.module.entity.ExperimentEntity">
+        update experiment
+        <set>
+            data = #{json_questions}
+        </set>
+        where experiment_id=#{experiment_id}
+    </update>
+
+    <update id="updateTable" parameterType="com.example.buaadataplatform.module.entity.TableEntity">
+        update tables
+        <set>
+            title = #{title},
+            question_id_list = #{question_id_list}
+        </set>
+        where table_id=#{table_id}
+    </update>
+
+    <update id="updateTest" parameterType="com.example.buaadataplatform.module.entity.TestEntity">
+        update test
+        <set>
+            title = #{title},
+            table_id = #{table_id},
+            experiment_id=#{experiment_id}
+        </set>
+        where test_id=#{test_id}
+    </update>
+
+    <select id="queryQuestionById" resultType="com.example.buaadataplatform.module.entity.QuestionEntity">
+        select * from question
+        where question_id=#{question_id}
+    </select>
+
+    <select id="queryAnswerByTestId" resultType="com.example.buaadataplatform.module.entity.AnswerEntity">
+        select * from answer
+        where test_id=#{test_id}
+    </select>
+
+    <select id="queryQuestionsByIdList" resultType="com.example.buaadataplatform.module.entity.QuestionEntity">
+        select * from question
+        where question_id in
+        <foreach collection="array" open="(" close=")" separator="," item="ids">
+            #{ids }
+        </foreach>
+        order by field(
+          question_id,
+        <foreach collection="array" separator="," item="ids">
+            #{ids }
+        </foreach>
+        )
+    </select>
+
+    <select id="queryQuestionCount" resultType="Integer">
+        select count(*)
+        from question
+    </select>
+
+    <select id="queryAllTable" resultType="com.example.buaadataplatform.module.entity.TableEntity">
+        select *
+        from tables
+    </select>
+
+    <select id="queryAllExperiment" resultType="com.example.buaadataplatform.module.entity.ExperimentEntity">
+        select *
+        from experiment
+    </select>
+
+    <delete id="delTableById">
+        delete
+        from tables
+        where table_id=#{table_id}
+    </delete>
+
+    <delete id="delExperimentById">
+        delete
+        from experiment
+        where experiment_id=#{experiment_id}
+    </delete>
+
+
+
+
+
+
+
+</mapper>

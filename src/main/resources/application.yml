@@ -1,0 +1,29 @@
+spring:
+  profiles:
+    active: dev
+  servlet:
+    # 文件上传大小
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  # jackson
+  jackson:
+    #日期类型格式
+    date-format: yyyy-MM-dd
+    #日期类型使用中国时区
+    time-zone: GMT+8
+    #序列化所有参数
+    default-property-inclusion: non_null
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    banner: false
+    db-config:
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      field-strategy: not_empty
+  mapper-locations: classpath:/mapper/*.xml
+  type-aliases-package: com.example.buaadataplatform.module.entity
+  type-aliases-super-type: java.lang.Object

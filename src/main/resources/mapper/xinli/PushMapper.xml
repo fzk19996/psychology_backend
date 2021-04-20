@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.buaadataplatform.module.mapper.xinli.PushMapper" >
+    
+    <resultMap id="PushEntity" type="com.example.buaadataplatform.module.entity.PushEntity">
+        <result column="content" property="content" typeHandler="com.example.buaadataplatform.common.utils.BlobTypeHandler"/>
+    </resultMap>
+
+    <resultMap id="ArticleEntity" type="com.example.buaadataplatform.module.entity.ArticleEntity">
+        <result column="content" property="content" typeHandler="com.example.buaadataplatform.common.utils.BlobTypeHandler"/>
+    </resultMap>
+
+    <insert id="insertArticle" parameterType="com.example.buaadataplatform.module.entity.ArticleEntity">
+        insert into article
+        (title, content)
+        values
+        (#{title}, #{content})
+    </insert>
+
+    <select id="queryTestIdByArticleId">
+        select test_id
+        from push
+        where article_id=#{article_id}
+    </select>
+
+    <update id="updatePushById" parameterType="com.example.buaadataplatform.module.entity.PushEntity">
+        update push
+        <set>
+            name=#{name},description=#{description}, summary=#{summary}, content=#{content}, psychological_adjustment=#{psychological_adjustment},
+            interpersonal_relationship=#{interpersonal_relationship}, depression=#{depression}, love=#{love}, workplace=#{workplace}, emotion=#{emotion},
+            startTime=#{startTime}, endTime=#{endTime}, image_path=#{image_path}, test_id=#{test_id}
+        </set>
+        where
+        article_id=#{article_id}
+    </update>
+
+    <insert id="insertPush" parameterType="com.example.buaadataplatform.module.entity.PushEntity">
+        insert into push
+        (article_id, username, start_date, end_date, test_id, title, summary)
+        values(#{article_id}, #{username}, #{start_date}, #{end_date}, #{test_id}, #{title}, #{summary})
+    </insert>
+
+    <select id="queryArticleById" resultMap="ArticleEntity">
+        select*
+        from push
+        where article_id=#{article_id}
+    </select>
+
+    <select id="queryPushByUsername" resultMap="PushEntity">
+        select p.start_date, p.end_date, p.username, a.content, a.description, a.summary, p.test_id
+        from push as p, article as a
+        where p.article_id=a.article_id and p.username=#{username}
+    </select>
+
+    <select id="queryPushList" resultMap="PushEntity">
+        select * from push
+    </select>
+
+    <select id="queryArticleList" resultMap="ArticleEntity">
+        select * from article
+    </select>
+
+    <select id="queryPushById" resultMap="PushEntity">
+        select p.start_date, p.end_date, p.username, a.content, a.description, a.summary, p.test_id
+        from push as p, article as a
+        where p.article_id=a.article_id and p.push_id=#{push_id}
+    </select>
+
+    <delete id="delPushById">
+        delete from push
+        where push_id=#{push_id}
+    </delete>
+
+    <select id="queryArticleByName" resultMap="ArticleEntity">
+        select * from article
+        where title like concat('%',#{name},'%')
+    </select>
+
+
+</mapper>

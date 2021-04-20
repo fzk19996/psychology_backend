@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.buaadataplatform.module.mapper.user.AuthorityMapper" >
+    
+    <insert id="insertUser" >
+        insert into dataplatform_authority(stu_id,authority,password,academy_id)
+        values(#{param1},#{param2},#{param3},#{param4})
+    </insert>
+
+    <update id="changeUser" >
+        update dataplatform_authority
+        set stu_id=#{param1},authority=#{param2},password=#{param3},academy_id=#{param4}
+        where stu_id=#{param5}
+    </update>
+
+    <update id="changePassword" >
+        update dataplatform_authority
+        set password=#{param2}
+        where stu_id=#{param1}
+    </update>
+
+    <select id="queryUserByAcademyId" resultType="com.example.buaadataplatform.module.entity.AuthorityEntity">
+        select *
+        from dataplatform_authority as d
+        where d.academy_id=#{param1}
+    </select>
+
+    <select id="queryAllUser" resultType="com.example.buaadataplatform.module.entity.AuthorityEntity">
+        select *
+        from dataplatform_authority
+    </select>
+
+    <delete id="deleteUserById">
+        delete
+        from dataplatform_authority
+        where stu_id=#{param1}
+    </delete>
+
+
+
+
+
+</mapper>

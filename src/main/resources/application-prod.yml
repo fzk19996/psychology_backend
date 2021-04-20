@@ -1,0 +1,62 @@
+server:
+  port: 8081
+
+static:
+  root:
+    #     path: /home/ubuntu/tmpfzk/upload
+#    path: /home/project/psychology/static/
+    path: /home/fzk/code/static/
+#     path: D:/Work/CloudSVN3/IMED_online/Platform/IMED_platform/
+#      path: D:/work/CloudSVN3/IMED_Online/static/
+#       path: /opt/suse/upload/
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+spring:
+  devtools:
+    restart:
+      enabled: false
+
+  # 配置hikari数据连接池
+  datasource:
+    xinli:
+      username: root
+      password: a62143421.
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://123.57.178.92:3306/buaa_xinli?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false
+
+    hikari:
+      connection-timeout: 30000
+      max-lifetime: 1800000
+      maximum-pool-size: 15
+      minimum-idle: 5
+      pool-name: DatebookHikariCP
+
+  # REDIS (RedisProperties)
+  redis:
+    # Redis数据库索引（默认为0）
+    database: 0
+    # Redis服务器地址
+    host: 127.0.0.1
+    # Redis服务器连接端口
+    port: 6379
+    # Redis服务器连接密码（默认为空）
+    password: a62143421.
+    jedis:
+      pool:
+        # 连接池最大连接数(使用负值表示没有限制)
+        max-active: 8
+        # 连接池最大阻塞等待时间(使用负值表示没有限制)
+        max-wait: -1
+        # 连接池中最大空闲连接
+        max-idle: 5
+        # 连接池中最小空闲连接
+        min-idle: 1
+    # 连接超时时间(毫秒)
+    timeout: 10000
+
+  resources:
+    static-locations: file:${static.root.path}
+  mvc:
+    static-path-pattern: /static/**

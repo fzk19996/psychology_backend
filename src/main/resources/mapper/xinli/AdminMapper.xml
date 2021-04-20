@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.buaadataplatform.module.mapper.xinli.AdminMapper" >
+
+    <select id="queryAdminInfoByAdminName" resultType="com.example.buaadataplatform.module.entity.AdminEntity">
+        select *
+        from admin as a
+        where a.admin_name=#{param1} and a.password=#{param2}
+    </select>
+    
+    <update id="updateAdminPassword">
+        update admin
+        set password=#{newPassword}
+        where password=#{oldPassword} and admin_id=#{admin_id} and admin_name=#{admin_name}
+    </update>
+
+    <select id="queryAdminInfoByAdminId" resultType="com.example.buaadataplatform.module.entity.AdminEntity">
+        select *
+        from admin
+        where admin_id = #{id}
+    </select>
+    
+    <insert id="insertAdmin" parameterType="com.example.buaadataplatform.module.entity.AdminEntity">
+        insert into admin(admin_name, password, admin, avatar, create_time)
+        values(#{admin_name}, #{password}, #{admin}, #{avatar}, NOW())
+    </insert>
+
+    <update id="updateAdmin">
+        update admin
+        set password=#{password}, admin=#{admin}
+        where admin_id=#{admin_id}
+    </update>
+
+    <select id="queryAdminInfoAll" resultType="com.example.buaadataplatform.module.entity.AdminEntity">
+        select *
+        from admin
+    </select>
+
+    <delete id="delAdminById">
+        delete
+        from admin
+        where admin_id=#{admin_id}
+    </delete>
+</mapper>
